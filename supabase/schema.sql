@@ -233,9 +233,11 @@ for select
 to anon, authenticated
 using (true);
 
-drop policy if exists "public_read_sync_runs" on public.sync_runs;
-create policy "public_read_sync_runs" on public.sync_runs
+drop policy if exists "admin_read_sync_runs" on public.sync_runs;
+create policy "admin_read_sync_runs" on public.sync_runs
 for select
-to anon, authenticated
-using (true);
+to authenticated
+using (
+  auth.jwt() ->> 'email' = 'admin@example.com' -- Replace with actual admin logic
+);
 

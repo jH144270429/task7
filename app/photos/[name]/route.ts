@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises"
 import { extname, join } from "node:path"
 import { NextResponse } from "next/server"
+import { createServerSupabaseClient } from "@/lib/supabase/server"
 
 function contentTypeFromExt(ext: string) {
   switch (ext.toLowerCase()) {
@@ -22,6 +23,13 @@ export async function GET(
   _request: Request,
   { params }: { params: { name: string } }
 ) {
+  const supabase = createServerSupabaseClient()
+  const { data: { session } } = await (supabase?.auth.getSession() ?? { data: { session: null } })
+
+  if (!session) {
+    return new NextResponse("Unauthorized", { status: 401 })
+  }
+
   const name = params.name
   if (!name || name.includes("..") || name.includes("/") || name.includes("\\")) {
     return new NextResponse("Not found", { status: 404 })

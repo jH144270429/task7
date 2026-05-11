@@ -1,0 +1,13 @@
+# AI Security & Development Rules
+
+## 🔒 Security First
+- **DO NOT** read, output, or store contents of `.env`, `.env.local`, or any file containing "key", "secret", "token", or "password" unless explicitly requested for debugging purposes.
+- **NEVER** hardcode credentials. Always use `process.env`.
+- **ALWAYS** check for Supabase RLS (Row Level Security) when modifying database schemas.
+- **ALWAYS** use Zod for environment variable and input validation.
+
+## 🛠 Development Workflow
+- Follow the existing project structure.
+- Use TypeScript for all new code.
+- Ensure all components are responsive and follow Tailwind CSS conventions.
+- Run `npm audit` after adding new dependencies.
