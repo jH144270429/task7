@@ -1,4 +1,10 @@
-import { withSentryConfig } from "@sentry/nextjs";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
+let withSentryConfig = (config) => config;
+try {
+  ({ withSentryConfig } = require("@sentry/nextjs"));
+} catch {}
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

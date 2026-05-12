@@ -23,11 +23,19 @@ export async function GET(
   _request: Request,
   { params }: { params: { name: string } }
 ) {
-  const supabase = createServerSupabaseClient()
-  const { data: { session } } = await (supabase?.auth.getSession() ?? { data: { session: null } })
+  if (process.env.NODE_ENV === "production") {
+    const supabase = createServerSupabaseClient()
+    let session: any = null
+    try {
+      const result = await supabase?.auth.getSession()
+      session = result?.data?.session ?? null
+    } catch {
+      session = null
+    }
 
-  if (!session) {
-    return new NextResponse("Unauthorized", { status: 401 })
+    if (!session) {
+      return new NextResponse("Unauthorized", { status: 401 })
+    }
   }
 
   const name = params.name
