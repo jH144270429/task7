@@ -23,7 +23,8 @@ export async function GET(
   _request: Request,
   { params }: { params: { name: string } }
 ) {
-  if (process.env.NODE_ENV === "production") {
+  const requireAuth = process.env.PHOTO_REQUIRE_AUTH?.trim() === "1"
+  if (requireAuth) {
     const supabase = createServerSupabaseClient()
     let session: any = null
     try {
